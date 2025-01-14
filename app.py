@@ -1,0 +1,104 @@
+from flask import Flask, render_template, request, redirect,url_for,jsonify
+from GAmodel import *
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///auth_flask.db'
+app.config['SECRET_KEY'] = 'ta-gevano'
+
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Hardcoded admin usernames
+ADMIN_USERS = ["admin1", "admin2", "superuser"]
+
+# User model
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+
+
+@app.route('/')
+def index():
+    # Mengembalikan halaman HTML menggunakan fungsi render_template
+    return render_template('home.html')
+
+
+@app.route("/recommendation",methods =["GET", "POST"])
+def meal_plan():
+    if (request.method == "POST"):
+        mealplans,listNutritionTarget =final(int(request.form['usia']))
+        labelMenu=["Pagi", "Siang", "Malam"]
+        labelNutrisi=["Karbohidrat","Lemak","Protein","Serat"]
+        imageNutrisi=["karbo.jpg","fat.jpg","prot.jpg","fiber.jpg"]
+        image=["https://images.unsplash.com/photo-1593100164369-e90cdff9678a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1167&q=80","https://images.unsplash.com/photo-1471938537155-7de0bd123d0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80","https://images.unsplash.com/photo-1629822937307-ce27f951e385?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80",]
+        totCaloriesMealPlan=[round(mealplans[0]['Energi (kal)'].sum(),1), 
+                             round(mealplans[1]['Energi (kal)'].sum(),1),
+                             round(mealplans[2]['Energi (kal)'].sum(),1)]
+        return render_template('recommendation.html', listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan)
+
+@app.route('/dashboard')
+@login_required
+def home():
+    return render_template('dashboard.html')
+
+@app.route('/recommendation')
+def recommendations():
+    return render_template('recommendation.html')
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form['username']
+        password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+
+        user = User(username=username, password=password)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for("login"))
+    return render_template("auth/page_register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            login_user(user)
+            if username in ADMIN_USERS:
+                return redirect(url_for("admin_dashboard"))
+            return redirect(url_for("home"))
+    return render_template("auth/page_login.html")
+
+# Handler untuk error 404
+@app.errorhandler(404)
+def page_not_found(e):
+    # Pastikan untuk memanggil file template di folder yang sesuai
+    return render_template('misc/404.html'), 404
+
+
+@app.route("/unauthorized")
+def unauthorized():
+    return render_template("misc/403_not_authorized.html"), 403
+
+# Tentukan handler untuk unauthorized (pengguna yang belum login)
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for('unauthorized'))  # Arahkan ke halaman unauthorize
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True) 
