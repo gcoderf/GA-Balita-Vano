@@ -62,6 +62,7 @@ def generate_meal_plan(food_data, target_calories, target_carbs, target_fat, tar
             [0.45, 0.27, 0.28], [0.32, 0.31, 0.37], [0.29, 0.38, 0.33],
             [0.36, 0.31, 0.33], [0.32, 0.38, 0.3], [0.36, 0.35, 0.29]
         ]
+        
         ratioCarbo = random.choice(listRandomRatio)
         ratioProhe = random.choice(listRandomRatio)
         ratioProna = random.choice(listRandomRatio)
@@ -98,7 +99,6 @@ def generate_meal_plan(food_data, target_calories, target_carbs, target_fat, tar
         penalty_fiber = abs(total_fiber - target_fiber)
 
         total_penalties = penalty_calories + penalty_carbs + penalty_fat + penalty_protein + penalty_fiber
-
         fitness = 100 / (1 + total_penalties)
         return fitness
 
@@ -216,4 +216,4 @@ def final(age):
         round(target_calories, 1)
     ]
 
-    return listDf, listNutritionTarget
+    return listDf, listNutritionTarget, best_fitness

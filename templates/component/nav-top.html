@@ -356,7 +356,7 @@
       <li class="nav-item navbar-dropdown dropdown-user dropdown">
         <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
           <div class="avatar avatar-online">
-            <img src="../../assets/img/avatars/1.png" alt class="rounded-circle" />
+            <img src="{{ url_for('static', filename='img/avatars/1.png') }}" alt class="rounded-circle" />
           </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -365,12 +365,12 @@
               <div class="d-flex align-items-center">
                 <div class="flex-shrink-0 me-2">
                   <div class="avatar avatar-online">
-                    <img src="../../assets/img/avatars/1.png" alt class="rounded-circle" />
+                    <img src="{{ url_for('static', filename='img/avatars/1.png') }}" alt class="rounded-circle" />
                   </div>
                 </div>
                 <div class="flex-grow-1">
-                  <h6 class="mb-0">John Doe</h6>
-                  <small class="text-muted">Admin</small>
+                  <h6 class="mb-0">{{ current_user.username }}</h6>
+                  <!--<small class="text-muted">Admin</small>-->
                 </div>
               </div>
             </a>
@@ -403,7 +403,7 @@
           </li>
           <li>
             <div class="d-grid px-2 pt-2 pb-1">
-              <a class="btn btn-sm btn-danger d-flex" href="auth-login-cover.html" target="_blank">
+              <a class="btn btn-sm btn-danger d-flex" href="keluar" target="_blank">
                 <small class="align-middle">Logout</small>
                 <i class="ti ti-logout ms-2 ti-14px"></i>
               </a>

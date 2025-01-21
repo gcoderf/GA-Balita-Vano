@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% block content %}
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+        {% include 'component/nav.html' %}
+        <!-- / Menu -->
+        <!-- Modal -->
+        <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Data Balita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="recommendation" method="POST">
+                  <div class="row">
+                    <div class="col mb-4">
+                      <label for="nameWithTitle" class="form-label">Umur Anak (tahun)</label>
+                      <select id="select2Basic" class="select2 form-select form-select-lg" name="usia" data-allow-clear="true" required>
+                        <option value="" selected disabled>Pilih opsi...</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row g-4">
+                    <div class="col mb-0">
+                      <label for="emailWithTitle" class="form-label">Berat Badan</label>
+                      <input type="text" id="emailWithTitle" class="form-control" name="berat_badan" placeholder="Berat Badan Anak" required />
+                    </div>
+                    <div class="col mb-0">
+                      <label for="dobWithTitle" class="form-label">Tinggi Badan</label>
+                      <input type="text" id="dobWithTitle" class="form-control" name="tinggi_badan" placeholder="Tinggi Badan Anak" />
+                    </div>
+                  </div>
+                  <br />
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Hasilkan Rekomendasi</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          {% include 'component/nav-top.html' %}
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <!-- / Content -->
+
+            <!-- Footer -->
+            {% include 'component/footer.html' %}
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+
+      <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+      <div class="drag-target"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+
+    
+  </body>
+
+{% endblock %}

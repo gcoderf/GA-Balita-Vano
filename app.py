@@ -3,6 +3,7 @@ from GAmodel import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from data_handler import get_jumlah_data
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///auth_flask.db'
@@ -36,7 +37,7 @@ def index():
 @app.route("/recommendation",methods =["GET", "POST"])
 def meal_plan():
     if (request.method == "POST"):
-        mealplans,listNutritionTarget =final(int(request.form['usia']))
+        mealplans,listNutritionTarget,best_fitness  =final(int(request.form['usia']))
         labelMenu=["Pagi", "Siang", "Malam"]
         labelNutrisi=["Karbohidrat","Lemak","Protein","Serat"]
         imageNutrisi=["karbo.jpg","fat.jpg","prot.jpg","fiber.jpg"]
@@ -44,12 +45,26 @@ def meal_plan():
         totCaloriesMealPlan=[round(mealplans[0]['Energi (kal)'].sum(),1), 
                              round(mealplans[1]['Energi (kal)'].sum(),1),
                              round(mealplans[2]['Energi (kal)'].sum(),1)]
-        return render_template('recommendation.html', listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan)
+        return render_template('recommendation.html', listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan,bestFitness=round(best_fitness, 2))
 
 @app.route('/dashboard')
 @login_required
 def home():
-    return render_template('dashboard.html')
+    file_path = 'bahan_pangan_eliminated.csv'
+    jumlah_data = get_jumlah_data(file_path)
+
+    # Mengarahkan ke dashboard berdasarkan username
+    if current_user.username == 'admin':
+        return render_template('admin/dashboard.html')
+    else:
+        return render_template('dashboard.html', jumlah_data=jumlah_data)
+
+
+@app.route('/admin/dashboard')
+
+def home_admin():
+    return render_template('tpk/dashboard.html')
+
 
 @app.route('/recommendation')
 def recommendations():
@@ -81,6 +96,15 @@ def login():
                 return redirect(url_for("admin_dashboard"))
             return redirect(url_for("home"))
     return render_template("auth/page_login.html")
+
+@app.route('/data-makanan')
+def data_makanan():
+    return render_template('data_makanan.html')
+
+@app.route('/keluar')
+def logout():
+    logout_user()  # Menghapus sesi pengguna
+    return redirect(url_for('login'))  # Mengarahkan kembali ke halaman login
 
 # Handler untuk error 404
 @app.errorhandler(404)
