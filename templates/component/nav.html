@@ -39,8 +39,8 @@
         <div data-i18n="Data AKG">Data AKG</div>
       </a>
     </li>
-    <li class="menu-item">
-      <a href="app-calendar.html" class="menu-link">
+    <li class="menu-item {% if request.endpoint == 'data_makanan' %}active{% endif %}">
+      <a href="data-makanan" class="menu-link">
         <i class="menu-icon tf-icons ti ti-calendar"></i>
         <div data-i18n="Data Makanan">Data Makanan</div>
       </a>

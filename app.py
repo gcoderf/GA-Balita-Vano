@@ -31,7 +31,7 @@ class User(UserMixin, db.Model):
 @app.route('/')
 def index():
     # Mengembalikan halaman HTML menggunakan fungsi render_template
-    return render_template('home.html')
+    return redirect(url_for("login"))
 
 
 @app.route("/recommendation",methods =["GET", "POST"])
@@ -50,6 +50,7 @@ def meal_plan():
 @app.route('/dashboard')
 @login_required
 def home():
+    # Mendapatkan jumlah data dari file CSV
     file_path = 'bahan_pangan_eliminated.csv'
     jumlah_data = get_jumlah_data(file_path)
 
@@ -73,6 +74,11 @@ def recommendations():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    # Jika pengguna sudah login, arahkan ke halaman home
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
+    # Jika pengguna belum login, tampilkan halaman register
     if request.method == "POST":
         username = request.form['username']
         password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
@@ -86,6 +92,11 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    # Jika pengguna sudah login, arahkan ke halaman home
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
+    # Jika pengguna belum login, tampilkan halaman login
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
@@ -125,4 +136,4 @@ def unauthorized():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True) 
+    app.run(host="0.0.0.0", port=5000,debug=True) 

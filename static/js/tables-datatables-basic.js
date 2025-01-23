@@ -35,45 +35,45 @@ document.addEventListener('DOMContentLoaded', function (e) {
         basicFullname: {
           validators: {
             notEmpty: {
-              message: 'The name is required'
-            }
-          }
+              message: 'The name is required',
+            },
+          },
         },
         basicPost: {
           validators: {
             notEmpty: {
-              message: 'Post field is required'
-            }
-          }
+              message: 'Post field is required',
+            },
+          },
         },
         basicEmail: {
           validators: {
             notEmpty: {
-              message: 'The Email is required'
+              message: 'The Email is required',
             },
             emailAddress: {
-              message: 'The value is not a valid email address'
-            }
-          }
+              message: 'The value is not a valid email address',
+            },
+          },
         },
         basicDate: {
           validators: {
             notEmpty: {
-              message: 'Joining Date is required'
+              message: 'Joining Date is required',
             },
             date: {
               format: 'MM/DD/YYYY',
-              message: 'The value is not a valid date'
-            }
-          }
+              message: 'The value is not a valid date',
+            },
+          },
         },
         basicSalary: {
           validators: {
             notEmpty: {
-              message: 'Basic Salary is required'
-            }
-          }
-        }
+              message: 'Basic Salary is required',
+            },
+          },
+        },
       },
       plugins: {
         trigger: new FormValidation.plugins.Trigger(),
@@ -81,11 +81,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-sm-12'
+          rowSelector: '.col-sm-12',
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
         // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
-        autoFocus: new FormValidation.plugins.AutoFocus()
+        autoFocus: new FormValidation.plugins.AutoFocus(),
       },
       init: instance => {
         instance.on('plugins.message.placed', function (e) {
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
           }
         });
-      }
+      },
     });
 
     // FlatPickr Initialization & Validation
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         // After selecting a date, we need to revalidate the field
         onChange: function () {
           fv.revalidateField('basicDate');
-        }
+        },
       });
     }
   })();
@@ -126,8 +126,29 @@ $(function () {
 
   if (dt_basic_table.length) {
     dt_basic = dt_basic_table.DataTable({
-      ajax: 'https://raw.githubusercontent.com/gcoderf/repo-json/refs/heads/main/table-datatable.json',
-      columns: [{ data: '' }, { data: 'id' }, { data: 'id' }, { data: 'full_name' }, { data: 'email' }, { data: 'start_date' }, { data: 'salary' }, { data: 'status' }, { data: '' }],
+      ajax: {
+        url: 'https://raw.githubusercontent.com/gcoderf/repo-json/refs/heads/main/bahan_pangan_eliminated.csv',
+        dataType: 'text',
+        dataSrc: function (csvData) {
+          return $.csv.toObjects(csvData);
+        },
+      },
+
+      columns: [
+        { data: '' },
+        { data: 'nama_bahan' },
+        { data: 'nama_bahan' },
+
+        { data: 'nama_bahan' },
+        { data: 'berat (g)' },
+        { data: 'energi (kal)' },
+        { data: 'protein (g)' },
+        { data: 'lemak (g)' },
+        { data: 'karbo (g)' },
+        { data: 'serat (g)' },
+        { data: 'food_type' },
+        { data: '' },
+      ],
       columnDefs: [
         {
           // For Responsive
@@ -160,47 +181,6 @@ $(function () {
           visible: false,
         },
         {
-          // Avatar image/badge, Name and post
-          targets: 3,
-          responsivePriority: 4,
-          render: function (data, type, full, meta) {
-            var $user_img = full['avatar'],
-              $name = full['full_name'],
-              $post = full['post'];
-            if ($user_img) {
-              // For Avatar image
-              var $output = '<img src="' + assetsPath + 'img/avatars/' + $user_img + '" alt="Avatar" class="rounded-circle">';
-            } else {
-              // For Avatar badge
-              var stateNum = Math.floor(Math.random() * 6);
-              var states = ['success', 'danger', 'warning', 'info', 'primary', 'secondary'];
-              var $state = states[stateNum],
-                $name = full['full_name'],
-                $initials = $name.match(/\b\w/g) || [];
-              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
-              $output = '<span class="avatar-initial rounded-circle bg-label-' + $state + '">' + $initials + '</span>';
-            }
-            // Creates full output for row
-            var $row_output =
-              '<div class="d-flex justify-content-start align-items-center user-name">' +
-              '<div class="avatar-wrapper">' +
-              '<div class="avatar me-2">' +
-              $output +
-              '</div>' +
-              '</div>' +
-              '<div class="d-flex flex-column">' +
-              '<span class="emp_name text-truncate">' +
-              $name +
-              '</span>' +
-              '<small class="emp_post text-truncate text-muted">' +
-              $post +
-              '</small>' +
-              '</div>' +
-              '</div>';
-            return $row_output;
-          },
-        },
-        {
           responsivePriority: 1,
           targets: 4,
         },
@@ -208,10 +188,10 @@ $(function () {
           // Label
           targets: -2,
           render: function (data, type, full, meta) {
-            var $status_number = full['status'];
+            var $status_number = full['food_type'];
             var $status = {
-              1: { title: 'Current', class: 'bg-label-primary' },
-              2: { title: 'Professional', class: ' bg-label-success' },
+              'raw': { title: 'Mentah', class: 'bg-label-primary' },
+              'processed': { title: 'Olahan', class: ' bg-label-success' },
               3: { title: 'Rejected', class: ' bg-label-danger' },
               4: { title: 'Resigned', class: ' bg-label-warning' },
               5: { title: 'Applied', class: ' bg-label-info' },
@@ -397,7 +377,7 @@ $(function () {
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['full_name'];
+              return 'Details of ' + data['nama_bahan'];
             },
           }),
           type: 'column',
@@ -416,7 +396,7 @@ $(function () {
         $('.card-header').after('<hr class="my-0">');
       },
     });
-    $('div.head-label').html('<h5 class="card-title mb-0">DataTable with Buttons</h5>');
+    $('div.head-label').html('<h5 class="card-title mb-0">Data Pangan</h5>');
   }
 
   // Add New record
@@ -439,7 +419,7 @@ $(function () {
           email: $new_email,
           start_date: $new_date,
           salary: '$' + $new_salary,
-          status: 5
+          status: 5,
         })
         .draw();
       count++;
@@ -460,15 +440,7 @@ $(function () {
   if (dt_complex_header_table.length) {
     var dt_complex = dt_complex_header_table.DataTable({
       ajax: assetsPath + 'json/table-datatable.json',
-      columns: [
-        { data: 'full_name' },
-        { data: 'email' },
-        { data: 'city' },
-        { data: 'post' },
-        { data: 'salary' },
-        { data: 'status' },
-        { data: '' }
-      ],
+      columns: [{ data: 'full_name' }, { data: 'email' }, { data: 'city' }, { data: 'post' }, { data: 'salary' }, { data: 'status' }, { data: '' }],
       columnDefs: [
         {
           // Label
@@ -480,15 +452,13 @@ $(function () {
               2: { title: 'Professional', class: ' bg-label-success' },
               3: { title: 'Rejected', class: ' bg-label-danger' },
               4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
+              5: { title: 'Applied', class: ' bg-label-info' },
             };
             if (typeof $status[$status_number] === 'undefined') {
               return data;
             }
-            return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
-            );
-          }
+            return '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>';
+          },
         },
         {
           // Actions
@@ -508,8 +478,8 @@ $(function () {
               '</div>' +
               '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
             );
-          }
-        }
+          },
+        },
       ],
       dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>><"table-responsive"t><"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       displayLength: 7,
@@ -517,9 +487,9 @@ $(function () {
       language: {
         paginate: {
           next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
-      }
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>',
+        },
+      },
     });
   }
 
@@ -530,17 +500,7 @@ $(function () {
   if (dt_row_grouping_table.length) {
     var groupingTable = dt_row_grouping_table.DataTable({
       ajax: assetsPath + 'json/table-datatable.json',
-      columns: [
-        { data: '' },
-        { data: 'full_name' },
-        { data: 'post' },
-        { data: 'email' },
-        { data: 'city' },
-        { data: 'start_date' },
-        { data: 'salary' },
-        { data: 'status' },
-        { data: '' }
-      ],
+      columns: [{ data: '' }, { data: 'full_name' }, { data: 'post' }, { data: 'email' }, { data: 'city' }, { data: 'start_date' }, { data: 'salary' }, { data: 'status' }, { data: '' }],
       columnDefs: [
         {
           // For Responsive
@@ -550,7 +510,7 @@ $(function () {
           searchable: false,
           render: function (data, type, full, meta) {
             return '';
-          }
+          },
         },
         { visible: false, targets: groupColumn },
         {
@@ -563,15 +523,13 @@ $(function () {
               2: { title: 'Professional', class: ' bg-label-success' },
               3: { title: 'Rejected', class: ' bg-label-danger' },
               4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
+              5: { title: 'Applied', class: ' bg-label-info' },
             };
             if (typeof $status[$status_number] === 'undefined') {
               return data;
             }
-            return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
-            );
-          }
+            return '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>';
+          },
         },
         {
           // Actions
@@ -592,8 +550,8 @@ $(function () {
               '</div>' +
               '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
             );
-          }
-        }
+          },
+        },
       ],
       order: [[groupColumn, 'asc']],
       dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -602,8 +560,8 @@ $(function () {
       language: {
         paginate: {
           next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>',
+        },
       },
       drawCallback: function (settings) {
         var api = this.api();
@@ -628,33 +586,21 @@ $(function () {
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['full_name'];
-            }
+              return 'Details of ' + data['nama_bahan'];
+            },
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
             var data = $.map(columns, function (col, i) {
               return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                ? '<tr data-dt-row="' +
-                    col.rowIndex +
-                    '" data-dt-column="' +
-                    col.columnIndex +
-                    '">' +
-                    '<td>' +
-                    col.title +
-                    ':' +
-                    '</td> ' +
-                    '<td>' +
-                    col.data +
-                    '</td>' +
-                    '</tr>'
+                ? '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td>' + col.title + ':' + '</td> ' + '<td>' + col.data + '</td>' + '</tr>'
                 : '';
             }).join('');
 
             return data ? $('<table class="table"/><tbody />').append(data) : false;
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     // Order by the grouping
@@ -675,16 +621,7 @@ $(function () {
   if (dt_multilingual_table.length) {
     var table_language = dt_multilingual_table.DataTable({
       ajax: assetsPath + 'json/table-datatable.json',
-      columns: [
-        { data: '' },
-        { data: 'full_name' },
-        { data: 'post' },
-        { data: 'email' },
-        { data: 'start_date' },
-        { data: 'salary' },
-        { data: 'status' },
-        { data: '' }
-      ],
+      columns: [{ data: '' }, { data: 'full_name' }, { data: 'post' }, { data: 'email' }, { data: 'start_date' }, { data: 'salary' }, { data: 'status' }, { data: '' }],
       columnDefs: [
         {
           // For Responsive
@@ -694,7 +631,7 @@ $(function () {
           searchable: false,
           render: function (data, type, full, meta) {
             return '';
-          }
+          },
         },
         {
           // Label
@@ -706,15 +643,13 @@ $(function () {
               2: { title: 'Professional', class: ' bg-label-success' },
               3: { title: 'Rejected', class: ' bg-label-danger' },
               4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
+              5: { title: 'Applied', class: ' bg-label-info' },
             };
             if (typeof $status[$status_number] === 'undefined') {
               return data;
             }
-            return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
-            );
-          }
+            return '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>';
+          },
         },
         {
           // Actions
@@ -735,15 +670,15 @@ $(function () {
               '</div>' +
               '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
             );
-          }
-        }
+          },
+        },
       ],
       language: {
         url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/' + lang + '.json',
         paginate: {
           next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>',
+        },
       },
       order: [[2, 'desc']],
       displayLength: 7,
@@ -754,33 +689,21 @@ $(function () {
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['full_name'];
-            }
+              return 'Details of ' + data['nama_bahan'];
+            },
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
             var data = $.map(columns, function (col, i) {
               return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                ? '<tr data-dt-row="' +
-                    col.rowIndex +
-                    '" data-dt-column="' +
-                    col.columnIndex +
-                    '">' +
-                    '<td>' +
-                    col.title +
-                    ':' +
-                    '</td> ' +
-                    '<td>' +
-                    col.data +
-                    '</td>' +
-                    '</tr>'
+                ? '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td>' + col.title + ':' + '</td> ' + '<td>' + col.data + '</td>' + '</tr>'
                 : '';
             }).join('');
 
             return data ? $('<table class="table"/><tbody />').append(data) : false;
-          }
-        }
-      }
+          },
+        },
+      },
     });
   }
 
