@@ -27,7 +27,6 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(200), nullable=False)
 
 
-
 @app.route('/')
 def index():
     # Mengembalikan halaman HTML menggunakan fungsi render_template
@@ -45,7 +44,7 @@ def meal_plan():
         totCaloriesMealPlan=[round(mealplans[0]['Energi (kal)'].sum(),1), 
                              round(mealplans[1]['Energi (kal)'].sum(),1),
                              round(mealplans[2]['Energi (kal)'].sum(),1)]
-        return render_template('recommendation.html', listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan,bestFitness=round(best_fitness, 2))
+        return render_template('orangtua/recommendation.html', listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan,bestFitness=round(best_fitness, 2))
 
 @app.route('/dashboard')
 @login_required
@@ -58,7 +57,7 @@ def home():
     if current_user.username == 'admin':
         return render_template('admin/dashboard.html')
     else:
-        return render_template('dashboard.html', jumlah_data=jumlah_data)
+        return render_template('orangtua/dashboard.html', jumlah_data=jumlah_data)
 
 
 @app.route('/admin/dashboard')
@@ -108,9 +107,16 @@ def login():
             return redirect(url_for("home"))
     return render_template("auth/page_login.html")
 
+
 @app.route('/data-makanan')
 def data_makanan():
-    return render_template('data_makanan.html')
+    return render_template('orangtua/data_makanan.html')
+
+
+@app.route('/data-akg')
+def data_akg():
+    return render_template('orangtua/data_akg.html')
+
 
 @app.route('/keluar')
 def logout():
