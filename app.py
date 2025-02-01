@@ -4,14 +4,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from data_handler import get_jumlah_data
+from models import db, bcrypt, User
+
+from routes import routes_bp  # Import blueprint dari routes.py
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///auth_flask.db'
 app.config['SECRET_KEY'] = 'ta-gevano'
 
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+db.init_app(app)
+bcrypt.init_app(app)
+
 login_manager = LoginManager(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -20,18 +26,9 @@ def load_user(user_id):
 # Hardcoded admin usernames
 ADMIN_USERS = ["admin1", "admin2", "superuser"]
 
-# User model
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
 
-
-@app.route('/')
-def index():
-    # Mengembalikan halaman HTML menggunakan fungsi render_template
-    return redirect(url_for("login"))
-
+# Daftarkan blueprint
+app.register_blueprint(routes_bp)
 
 @app.route("/recommendation",methods =["GET", "POST"])
 def meal_plan():
@@ -46,82 +43,20 @@ def meal_plan():
                              round(mealplans[2]['Energi (kal)'].sum(),1)]
         return render_template('orangtua/recommendation.html', listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan,bestFitness=round(best_fitness, 2))
 
-@app.route('/dashboard')
-@login_required
-def home():
-    # Mendapatkan jumlah data dari file CSV
-    file_path = 'bahan_pangan_eliminated.csv'
-    jumlah_data = get_jumlah_data(file_path)
 
-    # Mengarahkan ke dashboard berdasarkan username
-    if current_user.username == 'admin':
-        return render_template('admin/dashboard.html')
-    else:
-        return render_template('orangtua/dashboard.html', jumlah_data=jumlah_data)
-
-
-@app.route('/admin/dashboard')
-
-def home_admin():
-    return render_template('tpk/dashboard.html')
 
 
 @app.route('/recommendation')
 def recommendations():
-    return render_template('recommendation.html')
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    # Jika pengguna sudah login, arahkan ke halaman home
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
+    if current_user.username == 'admin':
+        return redirect(url_for('unauthorized'))
+    else:
+        return render_template('recommendation.html')
     
-    # Jika pengguna belum login, tampilkan halaman register
-    if request.method == "POST":
-        username = request.form['username']
-        password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
-
-        user = User(username=username, password=password)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for("login"))
-    return render_template("auth/page_register.html")
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    # Jika pengguna sudah login, arahkan ke halaman home
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    
-    # Jika pengguna belum login, tampilkan halaman login
-    if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if user and bcrypt.check_password_hash(user.password, password):
-            login_user(user)
-            if username in ADMIN_USERS:
-                return redirect(url_for("admin_dashboard"))
-            return redirect(url_for("home"))
-    return render_template("auth/page_login.html")
 
 
-@app.route('/data-makanan')
-def data_makanan():
-    return render_template('orangtua/data_makanan.html')
-
-
-@app.route('/data-akg')
-def data_akg():
-    return render_template('orangtua/data_akg.html')
-
-
-@app.route('/keluar')
-def logout():
-    logout_user()  # Menghapus sesi pengguna
-    return redirect(url_for('login'))  # Mengarahkan kembali ke halaman login
 
 # Handler untuk error 404
 @app.errorhandler(404)

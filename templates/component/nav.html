@@ -27,19 +27,20 @@
     <li class="menu-header small">
       <span class="menu-header-text" data-i18n="Menu Aplikasi">Menu Aplikasi</span>
     </li>
-    <li class="menu-item {% if request.endpoint == 'home' %}active{% endif %}">
+    <li class="menu-item {% if request.endpoint == 'routes.home' %}active{% endif %}">
       <a href="/dashboard" class="menu-link">
         <i class="menu-icon tf-icons ti ti-mail"></i>
         <div data-i18n="Dashboard">Dashboard</div>
+        <!--<p>The current endpoint is: <strong>{{ request.endpoint }}</strong></p>-->
       </a>
     </li>
-    <li class="menu-item {% if request.endpoint == 'data_akg' %}active{% endif %}">
+    <li class="menu-item {% if request.endpoint == 'routes.data_akg' %}active{% endif %}">
       <a href="data-akg" class="menu-link">
         <i class="menu-icon tf-icons ti ti-messages"></i>
         <div data-i18n="Data AKG">Data AKG</div>
       </a>
     </li>
-    <li class="menu-item {% if request.endpoint == 'data_makanan' %}active{% endif %}">
+    <li class="menu-item {% if request.endpoint == 'routes.data_makanan' %}active{% endif %}">
       <a href="data-makanan" class="menu-link">
         <i class="menu-icon tf-icons ti ti-calendar"></i>
         <div data-i18n="Data Makanan">Data Makanan</div>
