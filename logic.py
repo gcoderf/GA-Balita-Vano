@@ -12,8 +12,6 @@ bcrypt = Bcrypt()
 # Hardcoded admin usernames
 ADMIN_USERS = ["admin1", "admin2", "superuser"]
 
-
-# Correct decorator
 # Correct decorator
 def ortu_only(func):
     @wraps(func)
@@ -25,17 +23,7 @@ def ortu_only(func):
     return wrapper
 
 
-# Fungsi untuk halaman home
-def get_home():
-    # Mendapatkan jumlah data dari file CSV
-    file_path = 'bahan_pangan_eliminated.csv'
-    jumlah_data = get_jumlah_data(file_path)
 
-    # Mengarahkan ke dashboard berdasarkan username
-    if current_user.username == 'admin':
-        return render_template('admin/dashboard.html')
-    else:
-        return render_template('orangtua/dashboard.html', jumlah_data=jumlah_data)
 
 # Fungsi untuk halaman register
 def get_register():
@@ -76,8 +64,28 @@ def get_logout():
     logout_user()  # Menghapus sesi pengguna
     return redirect(url_for('routes.login'))
 
-def get_data_makanan():
-    return render_template('orangtua/data_makanan.html')
+# halaman dashboard
+def get_home():
+    # Mendapatkan jumlah data dari file CSV
+    file_path = 'bahan_pangan_eliminated.csv'
+    jumlah_data = get_jumlah_data(file_path)
 
+    # Mengarahkan ke dashboard berdasarkan username
+    if current_user.username == 'admin':
+        return render_template('admin/dashboard.html')
+    else:
+        return render_template('orangtua/dashboard.html', jumlah_data=jumlah_data)
+
+# halaman data makanan
+def get_data_makanan():
+    if current_user.username == 'admin':
+        return render_template('admin/data_makanan.html')
+    else:
+        return render_template('orangtua/data_makanan.html')
+
+# halaman data akg
 def get_data_akg():
-    return render_template('orangtua/data_akg.html')
+    if current_user.username == 'admin':
+        return render_template('admin/data_akg.html')
+    else:
+        return render_template('orangtua/data_akg.html')

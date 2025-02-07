@@ -7,11 +7,13 @@ from data_handler import get_jumlah_data
 from models import db, bcrypt, User
 
 from routes import routes_bp  # Import blueprint dari routes.py
-
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///auth_flask.db'
 app.config['SECRET_KEY'] = 'ta-gevano'
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['ALLOWED_EXTENSIONS'] = {'csv'}
 
 db.init_app(app)
 bcrypt.init_app(app)
@@ -26,6 +28,8 @@ def load_user(user_id):
 # Hardcoded admin usernames
 ADMIN_USERS = ["admin1", "admin2", "superuser"]
 
+# Pastikan folder uploads ada
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Daftarkan blueprint
 app.register_blueprint(routes_bp)
@@ -45,6 +49,35 @@ def meal_plan():
 
 
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            filename = "data-akg.csv"  # Nama file statis
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+            file.save(file_path)  # File otomatis menimpa jika ada
+            return redirect(url_for('data-akg'))
+
+    return render_template('upload.html')
+
+
+
+
+
+
+
 
 @app.route('/recommendation')
 def recommendations():
@@ -54,17 +87,13 @@ def recommendations():
         return render_template('recommendation.html')
     
 
-
-
-
-
 # Handler untuk error 404
 @app.errorhandler(404)
 def page_not_found(e):
     # Pastikan untuk memanggil file template di folder yang sesuai
     return render_template('misc/404.html'), 404
 
-
+# Handler untuk error 403
 @app.route("/unauthorized")
 def unauthorized():
     return render_template("misc/403_not_authorized.html"), 403
@@ -73,6 +102,7 @@ def unauthorized():
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for('unauthorized'))  # Arahkan ke halaman unauthorize
+
 
 if __name__ == '__main__':
     with app.app_context():

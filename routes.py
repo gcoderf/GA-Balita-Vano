@@ -26,7 +26,7 @@ def logout():
 @routes_bp.route('/')
 def index():
     # Mengembalikan halaman HTML menggunakan fungsi render_template
-    return redirect(url_for("login"))
+    return redirect(url_for("routes.login"))
 
 
 
@@ -38,13 +38,13 @@ def home():
 
 
 @routes_bp.route('/data-makanan')
-@ortu_only
+@login_required
 def data_makanan():
     return get_data_makanan()
 
 
 @routes_bp.route('/data-akg')
-@ortu_only
+@login_required
 def data_akg():
     return get_data_akg()
     
