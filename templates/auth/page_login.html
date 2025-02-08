@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Login Basic - Pages | Vuexy - Bootstrap Admin Template</title>
+    <title>Login | Nutrify Balita</title>
 
     <meta name="description" content="" />
 
@@ -75,29 +75,33 @@
                 </a>
               </div>
               <!-- /Logo -->
-              <h4 class="mb-1">Welcome to Nutrify Balita! 👋</h4>
-              <p class="mb-6">Please sign-in to your account and start the adventure</p>
+              <h4 class="mb-1">Selamat Datang di Nutrify Balita! 👋</h4>
+              <p class="mb-6">Masuk ke Akun Anda untuk mulai mendapatkan rekomendasi makanan si kecil! 🍽️👶</p>
+              
+              {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+              {% endfor %} {% endif %} {% endwith %}
 
               <form id="formAuthentication" class="mb-4" action="login" method="POST">
                 <div class="mb-6">
                   <label for="username" class="form-label">Username</label>
-                  <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan Username Anda" autofocus />
+                  <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan Username Anda" autofocus/>
                 </div>
                 <div class="mb-6 form-password-toggle">
                   <label class="form-label" for="password">Password</label>
                   <div class="input-group input-group-merge">
-                    <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                    <input type="password" id="password" class="form-control" name="password" minlength="8" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
                     <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                   </div>
                 </div>
                 <div class="my-8">
                   <div class="d-flex justify-content-between">
-                    <div class="form-check mb-0 ms-2">
+                    <!--<div class="form-check mb-0 ms-2">
                       <input class="form-check-input" type="checkbox" id="remember-me" />
                       <label class="form-check-label" for="remember-me"> Remember Me </label>
-                    </div>
+                    </div>-->
                     <a href="auth-forgot-password-basic.html">
-                      <p class="mb-0">Forgot Password?</p>
+                      <p class="mb-0">Lupa Password?</p>
                     </a>
                   </div>
                 </div>
@@ -114,9 +118,6 @@
                   <span>Buat akun disini</span>
                 </a>
               </p>
-
-
-
             </div>
           </div>
           <!-- /Register -->

@@ -1,5 +1,5 @@
 
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
 from data_handler import get_jumlah_data
 from flask_bcrypt import Bcrypt
@@ -52,12 +52,15 @@ def get_login():
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
+        
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             if username in ADMIN_USERS:
                 return redirect(url_for("admin_dashboard"))
             return redirect(url_for("routes.home"))
+        else:
+            flash('Username atau password salah!', 'danger')
     return render_template("auth/page_login.html")
 
 def get_logout():
