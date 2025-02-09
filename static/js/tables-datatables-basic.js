@@ -206,12 +206,12 @@ $(function () {
         {
           // Actions
           targets: -1,
-          title: 'Actions',
+          title: /*'Actions'*/'',
           orderable: false,
           searchable: false,
           render: function (data, type, full, meta) {
             return (
-              '<div class="d-inline-block">' +
+              /*'<div class="d-inline-block">' +
               '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
               '<ul class="dropdown-menu dropdown-menu-end m-0">' +
               '<li><a href="javascript:;" class="dropdown-item">Details</a></li>' +
@@ -221,7 +221,8 @@ $(function () {
               '</ul>' +
               '</div>' +
               '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
-            );
+            */''
+              );
           },
         },
       ],
@@ -368,10 +369,11 @@ $(function () {
             },
           ],
         },
-        {
-          text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Add New Record</span>',
-          className: 'create-new btn btn-primary waves-effect waves-light',
-        },
+        //{
+         // text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Add New Record</span>',
+         // className: 'create-new btn btn-primary waves-effect waves-light',
+        //},
+        /* DIHAPUS KARENA TIDAK BUTUH TOMBOL ADD NEW RECORD */
       ],
       responsive: {
         details: {
@@ -470,12 +472,12 @@ $(function () {
         {
           // Actions
           targets: -1,
-          title: 'Actions',
+          title: /*'Actions'*/'',
           orderable: false,
           searchable: false,
           render: function (data, type, full, meta) {
             return (
-              '<div class="d-inline-block">' +
+              /*'<div class="d-inline-block">' +
               '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
               '<ul class="dropdown-menu dropdown-menu-end m-0">' +
               '<li><a href="javascript:;" class="dropdown-item">Details</a></li>' +
@@ -485,7 +487,8 @@ $(function () {
               '</ul>' +
               '</div>' +
               '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
-            );
+            */''
+              );
           },
         },
       ],
@@ -632,10 +635,12 @@ $(function () {
             },
           ],
         },
+        /*
+        HAPUS ADD NEW RECORD
         {
           text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Add New Record</span>',
           className: 'create-new btn btn-primary waves-effect waves-light',
-        },
+        },*/
       ],
       responsive: {
         details: {
