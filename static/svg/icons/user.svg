@@ -1,0 +1,8 @@
+<svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g id="User">
+    <circle id="Head" cx="19" cy="13" r="5" fill="#7367F0" opacity="0.2"/>
+    <circle id="Head_Outline" cx="19" cy="13" r="5" stroke="#7367F0" stroke-width="2"/>
+    <path id="Body" d="M10 29C10 24.0294 14.0294 20 19 20C23.9706 20 28 24.0294 28 29" fill="#7367F0" opacity="0.2"/>
+    <path id="Body_Outline" d="M10 29C10 24.0294 14.0294 20 19 20C23.9706 20 28 24.0294 28 29" stroke="#7367F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

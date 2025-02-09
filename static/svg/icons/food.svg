@@ -1,0 +1,7 @@
+<svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="RicePlate">
+<path id="Plate" opacity="0.2" d="M19 32C27.2843 32 34 27.0751 34 21C34 14.9249 27.2843 10 19 10C10.7157 10 4 14.9249 4 21C4 27.0751 10.7157 32 19 32Z" fill="#7367F0"/>
+<path id="Rice" d="M14 18C16.5 16 21.5 16 24 18C26.5 20 24.5 22 19 22C13.5 22 11.5 20 14 18Z" fill="#7367F0"/>
+<path id="PlateOutline" d="M19 32C27.2843 32 34 27.0751 34 21C34 14.9249 27.2843 10 19 10C10.7157 10 4 14.9249 4 21C4 27.0751 10.7157 32 19 32Z" stroke="#7367F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>

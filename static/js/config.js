@@ -91,7 +91,7 @@ if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
     cssPath: 'static/vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
     themesPath: 'static/vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
-    displayCustomizer: true,
+    displayCustomizer: false,
     lang: localStorage.getItem('templateCustomizer-' + templateName + '--Lang') || 'en', // Set default language here
     // defaultTheme: 2,
     // defaultStyle: 'system',

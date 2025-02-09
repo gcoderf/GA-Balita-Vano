@@ -29,26 +29,26 @@
     </li>
     <li class="menu-item {% if request.endpoint == 'routes.home' %}active{% endif %}">
       <a href="/dashboard" class="menu-link">
-        <i class="menu-icon tf-icons ti ti-mail"></i>
+        <i class="menu-icon tf-icons ti ti-home"></i>
         <div data-i18n="Dashboard">Dashboard</div>
         <!--<p>The current endpoint is: <strong>{{ request.endpoint }}</strong></p>-->
       </a>
     </li>
     <li class="menu-item {% if request.endpoint == 'routes.data_akg' %}active{% endif %}">
       <a href="data-akg" class="menu-link">
-        <i class="menu-icon tf-icons ti ti-messages"></i>
+        <i class="menu-icon tf-icons ti ti-mood-kid"></i>
         <div data-i18n="Data AKG">Data AKG</div>
       </a>
     </li>
     <li class="menu-item {% if request.endpoint == 'routes.data_makanan' %}active{% endif %}">
       <a href="data-makanan" class="menu-link">
-        <i class="menu-icon tf-icons ti ti-calendar"></i>
+        <i class="menu-icon tf-icons ti ti-chef-hat"></i>
         <div data-i18n="Data Makanan">Data Makanan</div>
       </a>
     </li>
     <li class="menu-item {% if request.endpoint == 'meal_plan' %}active{% endif %}">
       <a href="/recommendation" class="menu-link" data-bs-toggle="modal" data-bs-target="#modalCenter">
-        <i class="menu-icon tf-icons ti ti-layout-kanban"></i>
+        <i class="menu-icon tf-icons ti ti-clipboard-list"></i>
         <div data-i18n="Rekomendasi Makanan">Rekomendasi Makanan</div>
       </a>
     </li>

@@ -74,10 +74,11 @@ def get_home():
     # Mendapatkan jumlah data dari file CSV
     file_path = 'bahan_pangan_eliminated.csv'
     jumlah_data = get_jumlah_data(file_path)
+    jumlah_user = User.query.count()
 
     # Mengarahkan ke dashboard berdasarkan username
     if current_user.username == 'admin':
-        return render_template('admin/dashboard.html')
+        return render_template('admin/dashboard.html', jumlah_data=jumlah_data ,jumlah_user=jumlah_user)
     else:
         return render_template('orangtua/dashboard.html', jumlah_data=jumlah_data)
 
