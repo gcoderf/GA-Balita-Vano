@@ -88,7 +88,7 @@ def upload_file_makanan():
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
-            filename = "bahan_pangan_eleminated.csv"  # Nama file statis
+            filename = "bahan_pangan_eliminated.csv"  # Nama file statis
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
             file.save(file_path)  # File otomatis menimpa jika ada
