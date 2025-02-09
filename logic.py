@@ -39,6 +39,7 @@ def get_register():
         user = User(username=username, password=password)
         db.session.add(user)
         db.session.commit()
+        flash('Akun berhasil dibuat! Silahkan login.', 'success')
         return redirect(url_for("routes.login"))
     return render_template("auth/page_register.html")
 
@@ -58,6 +59,7 @@ def get_login():
             login_user(user)
             if username in ADMIN_USERS:
                 return redirect(url_for("admin_dashboard"))
+            flash("Login Berhasil!", "success")
             return redirect(url_for("routes.home"))
         else:
             flash('Username atau password salah!', 'danger')
