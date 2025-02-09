@@ -10,7 +10,7 @@ from functools import wraps
 bcrypt = Bcrypt()
 
 # Hardcoded admin usernames
-ADMIN_USERS = ["admin1", "admin2", "superuser"]
+ADMIN_USERS = ["admin", "admin2", "superuser"]
 
 # Correct decorator
 def ortu_only(func):
@@ -58,7 +58,7 @@ def get_login():
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             if username in ADMIN_USERS:
-                return redirect(url_for("admin_dashboard"))
+                return redirect(url_for("routes.home"))
             flash("Login Berhasil!", "success")
             return redirect(url_for("routes.home"))
         else:
@@ -95,4 +95,13 @@ def get_data_akg():
         return render_template('admin/data_akg.html')
     else:
         return render_template('orangtua/data_akg.html')
+    
+def get_data_ortu():
+    users = User.query.filter(~User.username.in_(ADMIN_USERS)).all()
+
+    page = request.args.get('page', 1, type=int)  # Ambil parameter halaman, default 1
+    per_page = 10  # Jumlah pengguna per halaman
+    users_paginated = User.query.filter(User.username != 'admin').paginate(page=page, per_page=per_page, error_out=False)
+
+    return render_template('admin/data_orangtua.html', users=users_paginated)
     

@@ -14,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///auth_flask.db'
 app.config['SECRET_KEY'] = 'ta-gevano'
 app.config['UPLOAD_FOLDER'] = 'dataset'
 app.config['ALLOWED_EXTENSIONS'] = {'csv'}
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 bcrypt.init_app(app)

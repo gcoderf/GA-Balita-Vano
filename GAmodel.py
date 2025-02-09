@@ -100,6 +100,8 @@ def generate_meal_plan(food_data, target_calories, target_carbs, target_fat, tar
 
         total_penalties = penalty_calories + penalty_carbs + penalty_fat + penalty_protein + penalty_fiber
         fitness = 100 / (1 + total_penalties)
+
+        
         return fitness
 
     best_fitness = 0

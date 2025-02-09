@@ -47,4 +47,9 @@ def data_makanan():
 @login_required
 def data_akg():
     return get_data_akg()
+
+@routes_bp.route('/data-ortu')
+@login_required
+def data_ortu():
+    return get_data_ortu()
     

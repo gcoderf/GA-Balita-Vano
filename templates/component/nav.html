@@ -46,11 +46,21 @@
         <div data-i18n="Data Makanan">Data Makanan</div>
       </a>
     </li>
+    {% if current_user.username == 'admin' %}
+    <li class="menu-item {% if request.endpoint == 'routes.data_ortu' %}active{% endif %}">
+      <a href="data-ortu" class="menu-link">
+        <i class="menu-icon tf-icons ti ti-user"></i>
+        <div data-i18n="Data Pengguna">Data Pengguna</div>
+      </a>
+    </li>
+    {% endif %}
+    {% if current_user.username != 'admin' %}
     <li class="menu-item {% if request.endpoint == 'meal_plan' %}active{% endif %}">
       <a href="/recommendation" class="menu-link" data-bs-toggle="modal" data-bs-target="#modalCenter">
         <i class="menu-icon tf-icons ti ti-clipboard-list"></i>
         <div data-i18n="Rekomendasi Makanan">Rekomendasi Makanan</div>
       </a>
     </li>
+    {% endif %}
   </ul>
 </aside>
