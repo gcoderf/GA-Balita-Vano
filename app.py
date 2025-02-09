@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect,url_for,jsonify
+from flask import Flask, render_template, request, redirect,url_for,jsonify,send_from_directory, flash
 from GAmodel import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -12,7 +12,7 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///auth_flask.db'
 app.config['SECRET_KEY'] = 'ta-gevano'
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = 'dataset'
 app.config['ALLOWED_EXTENSIONS'] = {'csv'}
 
 db.init_app(app)
@@ -52,7 +52,7 @@ def meal_plan():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload-akg', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -64,17 +64,46 @@ def upload_file():
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
-            filename = "data-akg.csv"  # Nama file statis
+            filename = "akg.csv"  # Nama file statis
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
             file.save(file_path)  # File otomatis menimpa jika ada
-            return redirect(url_for('data-akg'))
+            flash("File berhasil di import!", "success")
+            return redirect(url_for("routes.data_akg"))
+        else:
+            flash("File tidak valid. Harap unggah file CSV.", "error")
+            return redirect(request.url)
 
-    return render_template('upload.html')
+    return render_template('admin/data_akg.html')
+
+@app.route('/upload-makanan', methods=['GET', 'POST'])
+def upload_file_makanan():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            filename = "bahan_pangan_eleminated.csv"  # Nama file statis
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+            file.save(file_path)  # File otomatis menimpa jika ada
+            flash("File berhasil di import!", "success")
+            return redirect(url_for("routes.data_makanan"))
+        else:
+            flash("File tidak valid. Harap unggah file CSV.", "error")
+            return redirect(request.url)
+
+    return render_template('admin/data_akg.html')
 
 
-
-
+@app.route('/dataset/<filename>')
+def get_file(filename):
+    return send_from_directory('dataset', filename)
 
 
 

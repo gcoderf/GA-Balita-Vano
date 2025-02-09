@@ -66,6 +66,30 @@
         <div class="container-xxl flex-grow-1 container-p-y">
           <div class="row g-6">
             <div class="col">
+              <div class="card mb-6">
+                <h5 class="card-header">Import Dataset AKG</h5>
+                <div class="card-body">
+                  <!-- Aler Login -->
+                  {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+                  <div class="w-100">
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                      {{ message }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% endif %} {% endwith %}
+                  <!-- / Aler Login -->
+                  <form action="upload-akg" method="post" enctype="multipart/form-data" class="mt-3">
+                    <div class="mb-3">
+                      <input type="file" name="file" class="form-control" accept=".csv" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                  </form>
+                </div>
+              </div>
+
               <!-- DataTable with Buttons -->
               <div class="card">
                 <div class="card-datatable table-responsive pt-0">
@@ -138,20 +162,7 @@
               <!--/ DataTable with Buttons -->
 
               <hr class="my-12" />
-              <div class="card mb-6">
-                <h5 class="card-header">Import Dataset AKG</h5>
-                <div class="card-body">
-                  <form action="/upload" class="dropzone needsclick" id="dropzone-basic">
-                    <div class="dz-message needsclick">
-                      Drop files here or click to upload
-                      <span class="note needsclick">(Pastikan Format Dataset adalah <span class="fw-medium">.CSV</span>)</span>
-                    </div>
-                    <div class="fallback">
-                      <input name="file" type="file" />
-                    </div>
-                  </form>
-                </div>
-              </div>
+
             </div>
           </div>
 

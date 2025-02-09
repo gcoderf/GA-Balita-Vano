@@ -94,3 +94,4 @@ def get_data_akg():
         return render_template('admin/data_akg.html')
     else:
         return render_template('orangtua/data_akg.html')
+    

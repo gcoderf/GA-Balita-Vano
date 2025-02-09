@@ -128,7 +128,7 @@ $(function () {
   if (dt_basic_table.length) {
     dt_basic = dt_basic_table.DataTable({
       ajax: {
-        url: 'https://raw.githubusercontent.com/gcoderf/repo-json/refs/heads/main/bahan_pangan_eliminated.csv',
+        url: '/dataset/bahan_pangan_eliminated.csv',
         dataType: 'text',
         dataSrc: function (csvData) {
           return $.csv.toObjects(csvData);
@@ -406,7 +406,7 @@ $(function () {
   if (dt_basic_table_akg.length) {
     dt_basic = dt_basic_table_akg.DataTable({
       ajax: {
-        url: 'https://raw.githubusercontent.com/gcoderf/repo-json/refs/heads/main/akg.csv',
+        url: '/dataset/akg.csv',
         dataType: 'text',
         dataSrc: function (csvData) {
           return $.csv.toObjects(csvData);
@@ -661,7 +661,7 @@ $(function () {
         $('.card-header').after('<hr class="my-0">');
       },
     });
-    $('div.head-label').html('<h5 class="card-title mb-0">Data Kelompok Umur</h5>');
+    $('div.head-label').html('<h5 class="card-title mb-0">Data AKG</h5>');
   }
 
   // Add New record
@@ -698,6 +698,10 @@ $(function () {
   $('.datatables-basic tbody').on('click', '.delete-record', function () {
     dt_basic.row($(this).parents('tr')).remove().draw();
   });
+
+
+
+  
 
   // Complex Header DataTable
   // --------------------------------------------------------------------
