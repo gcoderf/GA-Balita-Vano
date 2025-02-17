@@ -104,4 +104,7 @@ def get_data_ortu():
     users_paginated = User.query.filter(User.username != 'admin').paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template('admin/data_orangtua.html', users=users_paginated)
+
+def get_profile():
+    return render_template('component/profile.html')
     

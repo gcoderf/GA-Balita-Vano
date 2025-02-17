@@ -52,4 +52,9 @@ def data_akg():
 @login_required
 def data_ortu():
     return get_data_ortu()
+
+@routes_bp.route('/profile')
+@login_required
+def profile():
+    return get_profile()
     
