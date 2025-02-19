@@ -1,6 +1,11 @@
 import pandas as pd
 import random
 
+
+def calculate_zscore(value, median, sd):
+    return (value - median) / sd
+
+# roulle wheel selection
 def roulette_wheel_selection(population, fitness_scores):
     total_fitness = sum(fitness_scores)
     pick = random.uniform(0, total_fitness)
@@ -15,6 +20,8 @@ def get_food_info(food, indexes, indexOfChromosome, target_calories, food_data, 
     nama_bahan = food_data.loc[food, 'nama_bahan']
     kalori = food_data.loc[food, 'energi (kal)']
     amount = 0
+
+    # Encoding Gen
     if indexOfChromosome < 3:
         need = round(0.45 * target_calories)
         amount = need / round(kalori)
@@ -169,7 +176,7 @@ def generate_meal_plan(food_data, target_calories, target_carbs, target_fat, tar
         indexChromosomes += 1
     return meal_plan, best_fitness
 
-def final(age):
+def final(age, berat_badan, tinggi_badan):
     food_data = pd.read_csv('bahan_pangan_eliminated.csv')
 
     cols_to_clean = food_data.columns[0:9] 
@@ -190,6 +197,56 @@ def final(age):
         target_calories = kalori_bayi
     else:
         print('Umur yang diinputkan tidak valid')
+
+    # Reference values based on age
+    if age == 2:
+        median_bb = 12.2
+        sd_bb = 1.2
+        median_tb = 86.5
+        sd_tb = 3.2
+    elif age == 3:
+        median_bb = 14.0
+        sd_bb = 1.4
+        median_tb = 95.1
+        sd_tb = 3.8
+    elif age == 4:
+        median_bb = 15.3
+        sd_bb = 1.5
+        median_tb = 101.6
+        sd_tb = 4.1
+    elif age == 5:
+        median_bb = 16.2
+        sd_bb = 1.6
+        median_tb = 107.9
+        sd_tb = 4.4
+    else:
+        return None
+    
+    # Calculate Z-scores
+    zscore_bb = calculate_zscore(berat_badan, median_bb, sd_bb)
+
+    # Interpret Z-scores for BB/U
+    if zscore_bb < -3:
+        bb_status = "Gizi Buruk"
+    elif -3 <= zscore_bb < -2:
+        bb_status = "Gizi Kurang"
+    elif -2 <= zscore_bb <= 2:
+        bb_status = "Gizi Baik"
+    else:
+        bb_status = "Gizi Lebih"
+    
+    if bb_status == "Gizi Buruk":
+        special_note ="Berikan makanan tinggi kalori dan protein, Porsi kecil tapi sering, Tambahkan minyak atau margarin ke makanan, Prioritaskan protein hewani seperti telur, ikan, daging, Berikan susu formula atau ASI lebih sering"
+    elif bb_status == "Gizi Kurang":
+        special_note = "Tingkatkan porsi makan secara bertahap, Tambahkan snack bergizi di antara waktu makan, Perbanyak sumber protein dan karbohidrat, Berikan makanan yang kaya vitamin dan mineral, Tambahkan minyak ikan atau zaitun ke makanan"
+    elif bb_status == "Gizi Baik":
+        special_note = "Pertahankan pola makan yang sehat, Jaga pola makan yang teratur, Perbanyak sumber protein dan karbohidrat, Berikan makanan yang kaya vitamin dan mineral, Tambahkan minyak ikan atau zaitun ke makanan"
+    elif bb_status == "Gizi Lebih":
+        special_note = "Kurangi porsi makan secara bertahap, Perbanyak aktivitas fisik, Kurangi makanan tinggi kalori dan lemak, Berikan makanan rendah kalori dan lemak, Perbanyak sumber protein dan karbohidrat"
+    else:
+        special_note = "Tidak ada catatan khusus"
+
+
 
     target_carbs = 0.45 * target_calories  
     target_fat = 0.35 * target_calories  
@@ -218,4 +275,6 @@ def final(age):
         round(target_calories, 1)
     ]
 
-    return listDf, listNutritionTarget, best_fitness
+
+
+    return listDf, listNutritionTarget, best_fitness, bb_status, special_note

@@ -94,7 +94,11 @@
                       <tr>
                         <td>{{ loop.index + (users.page - 1) * users.per_page }}</td>
                         <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
+                        <td><form action="{{ url_for('delete_user', user_id=user.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-sm delete-user">
+                              <i class="ti ti-trash"></i> Hapus
+                            </button>
+                          </form></td>
                       </tr>
                       {% endfor %}
                     </tbody>
@@ -157,6 +161,8 @@
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
+
+  
 
   {% endblock %}
 </div>

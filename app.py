@@ -38,7 +38,7 @@ app.register_blueprint(routes_bp)
 @app.route("/recommendation",methods =["GET", "POST"])
 def meal_plan():
     if (request.method == "POST"):
-        mealplans,listNutritionTarget,best_fitness  =final(int(request.form['usia']))
+        mealplans,listNutritionTarget,best_fitness,bb_status, special_note  =final(int(request.form['usia']), int(request.form['berat_badan']), int(request.form['tinggi_badan']))
         labelMenu=["Pagi", "Siang", "Malam"]
         labelNutrisi=["Karbohidrat","Lemak","Protein","Serat"]
         imageNutrisi=["karbo.jpg","fat.jpg","prot.jpg","fiber.jpg"]
@@ -46,7 +46,7 @@ def meal_plan():
         totCaloriesMealPlan=[round(mealplans[0]['Energi (kal)'].sum(),1), 
                              round(mealplans[1]['Energi (kal)'].sum(),1),
                              round(mealplans[2]['Energi (kal)'].sum(),1)]
-        return render_template('orangtua/recommendation.html', listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan,bestFitness=round(best_fitness, 2))
+        return render_template('orangtua/recommendation.html', bb_status=bb_status, special_note=special_note, listMealPlan=mealplans, labelMenu=labelMenu, imageList=image, listNutritionTarget=listNutritionTarget,labelNutrisi=labelNutrisi,imageNutrisi=imageNutrisi,totCaloriesMealPlan=totCaloriesMealPlan,bestFitness=round(best_fitness, 2))
 
 
 
@@ -133,6 +133,14 @@ def unauthorized():
 def unauthorized():
     return redirect(url_for('unauthorized'))  # Arahkan ke halaman unauthorize
 
+@app.route('/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    user = User.query.filter_by(id=user_id).first_or_404()
+    db.session.delete(user)
+    db.session.commit()
+    flash('Data pengguna berhasil dihapus', 'success')
+    return redirect(url_for('routes.data_ortu'))
 
 if __name__ == '__main__':
     with app.app_context():
